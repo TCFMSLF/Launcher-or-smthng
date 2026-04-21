@@ -4,8 +4,8 @@ import os
 BASE = os.path.dirname(os.path.abspath(__file__))
 
 APPS = {
-    "1": ("Exex", "exex.c"),
-    "2": ("Secure", "secure.c"),
+    "1": ("Exex", "Exex.c"),
+    "2": ("Secure", "Secure.c"),
     "3": ("sesEf", "sesEf.c")
 }
 
