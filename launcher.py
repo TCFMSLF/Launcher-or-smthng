@@ -1,33 +1,56 @@
 import subprocess
-import sys
 import os
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 
 APPS = {
-    "1": ("Exex", "exex_main.py"),
-    "2": ("Secure", "secure_main.py")
+    "1": ("Exex", "exex.c"),
+    "2": ("Secure", "secure.c"),
+    "3": ("sesEf", "sesEf.c")
 }
 
-def run(file):
-    path = os.path.join(BASE, file)
+def compile_and_run(source_file):
+    source_path = os.path.join(BASE, source_file)
+    output_file = source_file.replace(".c", "")
 
-    if not os.path.exists(path):
-        print("Не найден:", path)
+    output_path = os.path.join(BASE, output_file)
+
+    if not os.path.exists(source_path):
+        print("Файл не найден:", source_path)
         return
 
-    subprocess.run([sys.executable, path])
+    print(f"[INFO] Компиляция {source_file}...")
+
+    compile_result = subprocess.run([
+        "gcc",
+        source_path,
+        "-o",
+        output_path
+    ])
+
+    if compile_result.returncode != 0:
+        print("[ERROR] Ошибка компиляции")
+        return
+
+    print(f"[INFO] Запуск {output_file}...\n")
+
+    subprocess.run([output_path])
 
 
 while True:
-    print("\n=== LAUNCHER ===")
-    for k, v in APPS.items():
-        print(k, "-", v[0])
+    print("\n=== C LAUNCHER ===")
+
+    for key, (name, _) in APPS.items():
+        print(f"{key} - {name}")
+
     print("0 - выход")
 
-    c = input("> ")
+    choice = input("> ")
 
-    if c == "0":
+    if choice == "0":
         break
-    elif c in APPS:
-        run(APPS[c][1])
+    elif choice in APPS:
+        name, file = APPS[choice]
+        compile_and_run(file)
+    else:
+        print("Ошибка ввода")
